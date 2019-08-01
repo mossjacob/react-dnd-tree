@@ -1,7 +1,7 @@
 /*
 */
 
-import { Component } from 'react'
+import React, { Component } from 'react'
 import * as d3 from 'd3'
 import * as dagreD3 from 'dagre-d3'
 
@@ -66,7 +66,7 @@ export default class DnDTree extends Component {
       .on("mouseout", node => {
         this.outCircle(node)
       })
-      .call(this.dragListener.call())
+    allNodes.call(this.dragListener.call())
 
     if (this.props.edgeDraw) {
       allNodes
@@ -159,9 +159,9 @@ export default class DnDTree extends Component {
       if (event.key == 'Delete' || event.key == 'Backspace') {
         if (this.selectedEdge) {
           console.log('delete', this.selectedEdge)
-          g.removeEdge(this.selectedEdge)
+          this.graph.removeEdge(this.selectedEdge)
           this.selectedEdge = null
-          this.renderer.render(g)
+          this.renderer.render(this.graph)
         }
       }
     })
@@ -186,7 +186,6 @@ export default class DnDTree extends Component {
     this.graph.setGraph({})
     this.graph.setDefaultEdgeLabel(function() { return {}; })
 
-    this.updateGraph()
 
     // Set up an SVG group so that we can translate the final graph.
     var svg = this.svg,
@@ -198,6 +197,10 @@ export default class DnDTree extends Component {
 
     // Create the renderer
     this.renderer = new GraphRenderer(this.svg.select('g'), this) //new dagreD3.render();
+    this.dragListener = new DragListener(this.graph, this.renderer)
+    this.edgeDraw = new EdgeDraw(this.graph, this.renderer)
+
+    this.updateGraph()
 
     // Set up zoom support
     const zoom = new ZoomListener().call()
@@ -214,9 +217,6 @@ export default class DnDTree extends Component {
     this.centerGraph(zoom)
 
     // Set handlers for nodes and edges
-    this.dragListener = new DragListener(this.graph, this.renderer)
-    this.edgeDraw = new EdgeDraw(this.graph, this.renderer)
-
     this.updateHandlers()
 
     this.renderer.render(this.graph)
