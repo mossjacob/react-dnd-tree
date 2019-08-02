@@ -7,6 +7,8 @@
   - Nodes can have multiple parents
 - Drag and drop node movement
 - Edges between nodes can be drawn intuitively
+- Edges can be deleted by selecting them and clicking the Delete key
+- Graph can be panned and zoomed
 
 ## Install
 - `npm i --save react-dnd-tree`

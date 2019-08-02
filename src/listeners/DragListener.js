@@ -24,7 +24,7 @@ export default class DragListener {
     if (!this.renderer.isBehaviourActive('nodeDrag')) {
       return
     }
-    console.log('update selecetd node', selectedNode)
+    // console.log('update selecetd node', selectedNode)
     this.selectedNode = selectedNode
     this.updateLink()
   }
@@ -95,7 +95,6 @@ export default class DragListener {
     })
     // remove edges of connected and save them
 
-    console.log(d)
     const node = d3.select('#node' + d)
     node.attr('pointer-events', 'none')
     node.select('.ghostCircle').attr('pointer-events', 'none');
@@ -129,6 +128,12 @@ export default class DragListener {
   }
 
 
+  clearCachedLinks() {
+    this.cachedLinks.forEach(e => {
+      d3.select(`#edgepath${e.v}-${e.w}`).attr('class', 'path')
+    })
+  }
+
   /**
    * Fold child links into node
    * For the parents there are several cases:
@@ -143,11 +148,15 @@ export default class DragListener {
     }
     const node = d3.select(`#node${d}`)
     d3.selectAll('.ghostCircle').attr('class', 'ghostCircle')
-    node.attr('class', 'node')
+    node.attr('class', 'node rendered')
     node.attr('pointer-events', '')
     node.select('.ghostCircle').attr('pointer-events', '')
 
     if (this.selectedNode) {
+      if (this.graph.hasEdge(this.selectedNode.customId, this.draggingNodeID)) {
+        this.renderer.dispatchError('Link already exists.')
+        this.clearCachedLinks()
+      }
       this.cachedLinks.forEach(e => {
         if (!this.draggingNodeIsParent) {
           this.graph.removeEdge(e.v, e.w)
@@ -158,11 +167,8 @@ export default class DragListener {
       if (this.selectedNode) {
         this.graph.setEdge(this.selectedNode.customId, d)
       }
-
     } else {
-      this.cachedLinks.forEach(e => {
-        d3.select(`#edgepath${e.v}-${e.w}`).attr('class', 'path')
-      })
+      this.clearCachedLinks()
     }
 
     this.draggingNode = null
