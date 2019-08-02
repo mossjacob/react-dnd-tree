@@ -76,6 +76,7 @@ export default class DragListener {
       return
     }
     d3.event.sourceEvent.stopPropagation()
+    this.renderer.setBehaviour('edgeDraw', false)
 
     this.draggingNodeID = d
     this.draggingNode = this.graph.node(d)
@@ -143,6 +144,7 @@ export default class DragListener {
    *    - delete links to parents
    */
   dragend = d => {
+    this.renderer.setBehaviour('edgeDraw', true)
     if (!this.renderer.isBehaviourActive('nodeDrag')) {
       return
     }

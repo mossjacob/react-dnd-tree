@@ -22,9 +22,8 @@ export default class EdgeDraw {
   }
 
   setSelectedNode = id => {
-    console.log('update selected node', id)
+    // console.log('update selected node', id)
     this.selectedNodeID = id
-    // this.updateLink()
   }
 
   getTranslation(transform) {
@@ -43,9 +42,8 @@ export default class EdgeDraw {
       const [dx, dy, k] = this.getTranslation(d3.select('svg#treeSVG g').attr('transform'))
       const coords= d3.mouse(this.svg.node());
       const src = {x: coords[0], y: coords[1]}
-      console.log(src)
       const tgt = this.anchor
-      console.log(tgt.x, tgt.y)
+
       data = [{
         source: {
           x: src.y,
@@ -86,20 +84,15 @@ export default class EdgeDraw {
   }
 
   dragstart = d => {
-    d3.event.sourceEvent.stopPropagation()
-
     this.renderer.setBehaviour('nodeDrag', false)
-    console.log(d)
+    if (!this.renderer.isBehaviourActive('edgeDraw')) {
+      return
+    }
+    this.renderer.setBehaviour('nodeDrag', false)
+
     this.draggingNodeID = d
     const coords= d3.mouse(this.svg.node());
     this.anchor = {x: coords[0], y: coords[1]}
-
-
-    // const node = d3.select('#node' + d)
-    // node.attr('pointer-events', 'none')
-    // node.select('.ghostCircle').attr('pointer-events', 'none');
-    // d3.selectAll('.ghostCircle').attr('class', 'ghostCircle show');
-    // node.attr('class', 'node activeDrag');
 
     this.updateLink()
   }
@@ -108,17 +101,11 @@ export default class EdgeDraw {
     this.updateLink()
   }
 
-
-  /**
-   * Fold child links into node
-   * For the parents there are several cases:
-   * 1. node has no parent (node is a root)
-   *    
-   * 2. node has parents
-   *    - delete links to parents
-   */
   dragend = d => {
-    console.log(this.selectedNodeID, this.draggingNodeID)
+    this.renderer.setBehaviour('nodeDrag', true)
+    if (!this.renderer.isBehaviourActive('edgeDraw')) {
+      return
+    }
     if (this.selectedNodeID != null && this.draggingNodeID !== this.selectedNodeID) {
       if (!this.graph.hasEdge(this.selectedNodeID, this.draggingNodeID)) {
         if (this.graph.hasEdge(this.draggingNodeID, this.selectedNodeID)) {
@@ -136,7 +123,6 @@ export default class EdgeDraw {
     this.updateLink()
 
     this.renderer.render(this.graph)
-    this.renderer.setBehaviour('nodeDrag', true)
   }
 
 }

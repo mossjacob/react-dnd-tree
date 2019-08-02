@@ -19,7 +19,7 @@ export default class DnDTree extends Component {
     this.selectedEdge = null
   }
 
-  diagonal = data => d3.linkHorizontal().x(d => d.y).y(d => d.x)(data)
+  // diagonal = data => d3.linkHorizontal().x(d => d.y).y(d => d.x)(data)
 
   overCircle = (d)  => {
     console.log("over " + d)
@@ -76,9 +76,9 @@ export default class DnDTree extends Component {
           this.edgeDraw.setSelectedNode(node)
         })
         .on('mouseout', node => {
-          // console.log('out', node)
           d3.selectAll(`#notchUp${node}`).attr('class', 'notchHide')
           d3.selectAll(`#notchDown${node}`).attr('class', 'notchHide')
+          this.edgeDraw.setSelectedNode(null)
         })
       allNodes
         .append('circle')
@@ -136,7 +136,6 @@ export default class DnDTree extends Component {
     for (let edge of edges) {
       this.graph.setEdge(edge.from, edge.to)
     }
-
 
     this.graph.nodes().forEach(v => {
       var node = this.graph.node(v);
