@@ -10,6 +10,9 @@
 - Edges can be deleted by selecting them and clicking the Delete key
 - Graph can be panned and zoomed
 
+![example directed graph](https://github.com/JCobbles/react-dnd-tree/raw/master/dag.png)
+
+
 ## Install
 - `npm i --save react-dnd-tree`
 
