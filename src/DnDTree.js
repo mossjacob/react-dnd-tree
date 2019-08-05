@@ -176,8 +176,7 @@ export default class DnDTree extends Component {
     document.addEventListener('keydown', event => {
       if (event.key == 'Delete' || event.key == 'Backspace') {
         if (this.selectedEdge) {
-          console.log('delete', this.selectedEdge)
-          this.graph.removeEdge(this.selectedEdge)
+          this.renderer.removeEdge(this.selectedEdge)
           this.selectedEdge = null
           this.renderer.render(this.graph)
         }

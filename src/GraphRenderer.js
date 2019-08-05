@@ -2,6 +2,7 @@ import * as d3 from 'd3'
 import * as dagreD3 from 'dagre-d3'
 
 export const NEW_EDGE = 'NEW_EDGE'
+export const DELETE_EDGE = 'DELETE_EDGE'
 
 export default class GraphRenderer {
 
@@ -18,6 +19,16 @@ export default class GraphRenderer {
 
   isBehaviourActive(behaviour) {
     return this.behaviours[behaviour]
+  }
+
+  removeEdge(edge) {
+    let edges = this.tree.state.edges
+    edges = edges.filter(e => e.from != edge.v || e.to != edge.w)
+    console.log(edges)
+    this.tree.setState({ edges }, () => {
+      this.tree.getGraph().removeEdge(edge)
+      this.tree.dispatchUpdate({ type: DELETE_EDGE, data: {from: edge.v, to: edge.w} })
+    })
   }
 
   setEdge(from, to) {

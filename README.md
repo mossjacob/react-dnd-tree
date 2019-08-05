@@ -36,6 +36,7 @@ function Component(props) {
       edgeDraw
       errorHandler={errorHandler}
       updateHandler={updateHandler}
+      edgeType='curve'
     />
   )
 }
@@ -48,3 +49,4 @@ function Component(props) {
 - `edgeDraw`: default=True, whether you can draw edges between nodes
 - `errorHandler`: callback function taking an error message
 - `updateHandler`: callback taking (nodes, edges) every time the user updates the graph
+- `edgeType`: (curve | line) the line interpolation style between nodes
