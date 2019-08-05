@@ -46,12 +46,12 @@ export default class EdgeDraw {
 
       data = [{
         source: {
-          x: src.y,
-          y: src.x
+          x: src.x,
+          y: src.y
         },
         target: {
-          x: tgt.y,
-          y: tgt.x
+          x: tgt.x,
+          y: tgt.y
         }
       }]
 
@@ -65,8 +65,8 @@ export default class EdgeDraw {
       link.enter().append('line').attr('class', 'templink')
         .attr("x1", src.x)
         .attr("y1", src.y)
-        .attr("x2", tgt.x*k + dx)
-        .attr("y2", tgt.y*k + dy)
+        .attr("x2", tgt.x)
+        .attr("y2", tgt.y)
         .attr('pointer-events', 'none')
 
       link.attr("x1", src.x)

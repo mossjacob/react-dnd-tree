@@ -49,24 +49,31 @@ export default class DragListener {
 
       data = [{
         source: {
-          x: src.y*k + dy,
-          y: src.x*k + dx
+          y: src.y*k + dy,
+          x: src.x*k + dx
         },
         target: {
-          x: tgt.y*k + dy,
-          y: tgt.x*k + dx
+          y: tgt.y*k + dy,
+          x: tgt.x*k + dx
         }
       }]
     }
 
     const link = d3.select('svg#treeSVG').selectAll(".templink").data(data)
 
-    link.enter().append("path")
-      .attr("class", "templink")
-      .attr("d", d3.linkHorizontal().x(d => d.y).y(d => d.x))
+    link.enter().append('line')
+      .attr('class', 'templink')
+      .attr("x1", data.length>0 ? data[0].source.x : 0)
+      .attr("y1", data.length>0 ? data[0].source.y : 0)
+      .attr("x2", data.length>0 ? data[0].target.x : 0)
+      .attr("y2", data.length>0 ? data[0].target.y : 0)
       .attr('pointer-events', 'none');
 
-    link.attr("d", d3.linkHorizontal().x(d => d.y).y(d => d.x))
+    link
+      .attr("x1", data.length>0 ? data[0].source.x : 0)
+      .attr("y1", data.length>0 ? data[0].source.y : 0)
+      .attr("x2", data.length>0 ? data[0].target.x : 0)
+      .attr("y2", data.length>0 ? data[0].target.y : 0)
 
     link.exit().remove()
   }
