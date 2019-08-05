@@ -23,7 +23,11 @@ export default class DnDTree extends Component {
     }
   }
 
-  // diagonal = data => d3.linkHorizontal().x(d => d.y).y(d => d.x)(data)
+  static defaultProps = {
+    edgeType: 'curve',
+    height: 400,
+    edgeDraw: true,
+  }
 
   overCircle = (d)  => {
     console.log("over " + d)
@@ -144,7 +148,10 @@ export default class DnDTree extends Component {
     });
 
     for (let edge of edges) { // set curve: d3.curveBundle.beta(0) for straight line
-      this.graph.setEdge(edge.from, edge.to, { arrowhead: 'vee', curve: d3.curveBasis })
+      this.graph.setEdge(edge.from, edge.to, {
+        arrowhead: 'vee',
+        curve: this.props.edgeType == 'curve' ? d3.curveBasis : undefined
+      })
     }
 
     this.graph.nodes().forEach(v => {
