@@ -1,8 +1,9 @@
 import * as d3 from 'd3'
 import * as dagreD3 from 'dagre-d3'
 
-export default class GraphRenderer {
+export const NEW_EDGE = 'NEW_EDGE'
 
+export default class GraphRenderer {
 
   constructor(element, tree) {
     this.element = element
@@ -17,6 +18,12 @@ export default class GraphRenderer {
 
   isBehaviourActive(behaviour) {
     return this.behaviours[behaviour]
+  }
+
+  setEdge(from, to) {
+    this.tree.setState({edges: [...this.tree.state.edges, {from, to}]}, () => {
+      this.tree.dispatchUpdate({ type: NEW_EDGE, data: {from, to} })
+    })
   }
 
   dispatchError(errorMsg) {

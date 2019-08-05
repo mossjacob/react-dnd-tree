@@ -23,7 +23,7 @@ export default class EdgeDraw {
 
   setSelectedNode = id => {
     // console.log('update selected node', id)
-    this.selectedNodeID = id
+    this.selectedNodeID = id != null ? parseInt(id) : null
   }
 
   getTranslation(transform) {
@@ -90,7 +90,7 @@ export default class EdgeDraw {
     }
     this.renderer.setBehaviour('nodeDrag', false)
 
-    this.draggingNodeID = d
+    this.draggingNodeID = parseInt(d)
     const coords= d3.mouse(this.svg.node());
     this.anchor = {x: coords[0], y: coords[1]}
 
@@ -111,7 +111,7 @@ export default class EdgeDraw {
         if (this.graph.hasEdge(this.draggingNodeID, this.selectedNodeID)) {
           this.renderer.dispatchError('Link already exists.')
         }
-        this.graph.setEdge(this.draggingNodeID, this.selectedNodeID)
+        this.renderer.setEdge(this.draggingNodeID, this.selectedNodeID)
       } else {
         this.renderer.dispatchError('Link could not be created, would create loop.')
       }

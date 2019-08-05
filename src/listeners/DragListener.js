@@ -174,7 +174,7 @@ export default class DragListener {
         }
       })
       if (this.selectedNode) {
-        this.graph.setEdge(this.selectedNode.customId, d)
+        this.renderer.setEdge(this.selectedNode.customId, d)
       }
     } else {
       this.clearCachedLinks()

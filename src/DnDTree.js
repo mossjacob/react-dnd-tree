@@ -17,6 +17,10 @@ export default class DnDTree extends Component {
     super(props, context)
     this.selectedNode = null
     this.selectedEdge = null
+    this.state = {
+      nodes: props.nodes,
+      edges: props.edges
+    }
   }
 
   // diagonal = data => d3.linkHorizontal().x(d => d.y).y(d => d.x)(data)
@@ -119,8 +123,15 @@ export default class DnDTree extends Component {
     }
   }
 
+  dispatchUpdate(update) {
+    if (this.props.updateHandler) {
+      this.props.updateHandler(this.state.nodes, this.state.edges, update)
+    }
+  }
+
   updateGraph() {
-    const { nodes, edges } = this.props
+    const { nodes, edges } = this.state
+
     let counter = 0
     for (let node of nodes) {
       this.graph.setNode(counter++, { label: node.label })
@@ -132,9 +143,8 @@ export default class DnDTree extends Component {
       node.rx = node.ry = 5;
     });
 
-    // Set up edges, no special attributes.
-    for (let edge of edges) {
-      this.graph.setEdge(edge.from, edge.to)
+    for (let edge of edges) { // set curve: d3.curveBundle.beta(0) for straight line
+      this.graph.setEdge(edge.from, edge.to, { arrowhead: 'vee', curve: d3.curveBasis })
     }
 
     this.graph.nodes().forEach(v => {
@@ -144,6 +154,8 @@ export default class DnDTree extends Component {
 
   }
 
+  getGraph = () => this.graph
+
   centerGraph(zoom) {
     let w = this.svg.node().getBBox().width/2
     let h = this.svg.node().getBBox().height/2
@@ -152,7 +164,7 @@ export default class DnDTree extends Component {
   }
 
   componentDidMount() {
-    const { height, nodes, edges } = this.props
+    const { height, nodes, edges } = this.state
 
     document.addEventListener('keydown', event => {
       if (event.key == 'Delete' || event.key == 'Backspace') {
