@@ -37,6 +37,10 @@ export default class GraphRenderer {
     })
   }
 
+  setSelectedNode(node) {
+    this.tree.onNodeSelected(this.tree.getGraph().node(node))
+  }
+
   dispatchError(errorMsg) {
     this.tree.dispatchError(errorMsg)
   }

@@ -154,6 +154,7 @@ export default class DragListener {
    */
   dragend = d => {
     this.renderer.setBehaviour('edgeDraw', true)
+    this.renderer.setSelectedNode(d)
     if (!this.renderer.isBehaviourActive('nodeDrag')) {
       return
     }

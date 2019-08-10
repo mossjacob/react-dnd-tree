@@ -21,6 +21,7 @@ export default class DnDTree extends Component {
       nodes: props.nodes,
       edges: props.edges
     }
+    this.onNodeSelected = props.onNodeSelected || (() => {})
   }
 
   static defaultProps = {

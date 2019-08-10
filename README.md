@@ -37,6 +37,7 @@ function Component(props) {
       errorHandler={errorHandler}
       updateHandler={updateHandler}
       edgeType='curve'
+      onNodeSelected={nodeSelected}
     />
   )
 }
@@ -48,5 +49,6 @@ function Component(props) {
 - `edges`: list of edge objects of format { from: int, to: int } where from, to are indices into the nodes list
 - `edgeDraw`: default=True, whether you can draw edges between nodes
 - `errorHandler`: callback function taking an error message
+- `onNodeSelected`: callback function taking the selected node object
 - `updateHandler`: callback taking (nodes, edges) every time the user updates the graph
 - `edgeType`: (curve | line) the line interpolation style between nodes
