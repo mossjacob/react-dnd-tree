@@ -85,29 +85,9 @@ export default class DragListener {
     d3.event.sourceEvent.stopPropagation()
     this.renderer.setBehaviour('edgeDraw', false)
 
-    this.draggingNodeID = d
+    this.draggingNodeID = null
     this.draggingNode = this.graph.node(d)
 
-    // get all edges
-    const connectedEdges = this.graph.nodeEdges(d)
-    this.cachedLinks = connectedEdges
-
-    this.draggingNodeIsParent = false
-    connectedEdges.forEach(e => {
-      if (e.v == d) { // d is parent
-        this.draggingNodeIsParent = true
-      }
-
-      d3.select(`#edgepath${e.v}-${e.w}`).attr('class', 'path edgeHidden')
-      // this.graph.removeEdge(e.v, e.w)
-    })
-    // remove edges of connected and save them
-
-    const node = d3.select('#node' + d)
-    node.attr('pointer-events', 'none')
-    node.select('.ghostCircle').attr('pointer-events', 'none');
-    d3.selectAll('.ghostCircle').attr('class', 'ghostCircle show');
-    node.attr('class', 'node activeDrag');
 
     this.updateLink()
   }
@@ -118,6 +98,28 @@ export default class DragListener {
     }
     const node = d3.select(`#node${d}`)
 
+    if (this.draggingNodeID === null) {
+      const connectedEdges = this.graph.nodeEdges(d)
+      this.cachedLinks = connectedEdges
+
+      this.draggingNodeIsParent = false
+      connectedEdges.forEach(e => {
+        if (e.v == d) { // d is parent
+          this.draggingNodeIsParent = true
+        }
+
+        d3.select(`#edgepath${e.v}-${e.w}`).attr('class', 'path edgeHidden')
+        // this.graph.removeEdge(e.v, e.w)
+      })
+      // remove edges of connected and save them
+
+      const node = d3.select('#node' + d)
+      node.attr('pointer-events', 'none')
+      node.select('.ghostCircle').attr('pointer-events', 'none');
+      d3.selectAll('.ghostCircle').attr('class', 'ghostCircle show');
+      node.attr('class', 'node rendered activeDrag');
+
+    }
     this.draggingNodeID = d
     this.draggingNode = this.graph.node(d)
     const prevX = this.draggingNode.x,
