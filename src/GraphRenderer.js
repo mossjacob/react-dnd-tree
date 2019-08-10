@@ -24,7 +24,7 @@ export default class GraphRenderer {
   removeEdge(edge) {
     let edges = this.tree.state.edges
     edges = edges.filter(e => e.from != edge.v || e.to != edge.w)
-    console.log(edges)
+
     this.tree.setState({ edges }, () => {
       this.tree.getGraph().removeEdge(edge)
       this.tree.dispatchUpdate({ type: DELETE_EDGE, data: {from: edge.v, to: edge.w} })

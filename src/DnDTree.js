@@ -135,17 +135,19 @@ export default class DnDTree extends Component {
   }
 
   updateGraph() {
-    const { nodes, edges } = this.state
+    const { nodes, edges } = this.props
 
-    let counter = 0
     for (let node of nodes) {
-      this.graph.setNode(counter++, { label: node.label })
+      this.graph.setNode(node.serverId, node)
     }
+    // while (counter < 20) {
+    //   this.graph.removeNode(counter)
+    //   counter++
+    // }
 
     this.graph.nodes().forEach(v => {
-      var node = this.graph.node(v);
-      // Round the corners of the nodes
-      node.rx = node.ry = 5;
+      var node = this.graph.node(v)
+      node.rx = node.ry = 5
     });
 
     for (let edge of edges) { // set curve: d3.curveBundle.beta(0) for straight line
@@ -154,11 +156,6 @@ export default class DnDTree extends Component {
         curve: this.props.edgeType == 'curve' ? d3.curveBasis : undefined
       })
     }
-
-    this.graph.nodes().forEach(v => {
-      var node = this.graph.node(v);
-      node.rx = node.ry = 5;
-    });
 
   }
 
@@ -171,6 +168,25 @@ export default class DnDTree extends Component {
     this.svg.call(zoom.transform, t)
   }
 
+  componentDidUpdate(prevProps) {
+    if (this.props.nodes != prevProps.nodes) {
+
+      const deletionNodes = prevProps.nodes.map(n => n.serverId).diff(
+        this.props.nodes.map(n => n.serverId)
+      )
+      for (let node of deletionNodes) {
+        this.graph.removeNode(node)
+      }
+      this.renderer.render(this.graph)
+
+    }
+  }
+
+  createGraph() {
+    this.graph = new dagreD3.graphlib.Graph()
+    this.graph.setGraph({})
+    this.graph.setDefaultEdgeLabel(function() { return {}; })
+  }
   componentDidMount() {
     const { height, nodes, edges } = this.state
 
@@ -187,7 +203,6 @@ export default class DnDTree extends Component {
     this.svg = d3.select("#tree-container")
       .append("svg")
       .on('click', () => {
-        console.log('click', this.selectedEdge)
         if (this.selectedEdge != null) {
           d3.select(`#edgepath${this.selectedEdge.v}-${this.selectedEdge.w}`).attr('class', '')
         }
@@ -199,10 +214,8 @@ export default class DnDTree extends Component {
       .style("font", "10px sans-serif")
 
 
-    this.graph = new dagreD3.graphlib.Graph()
 
-    this.graph.setGraph({})
-    this.graph.setDefaultEdgeLabel(function() { return {}; })
+    this.createGraph()
 
 
     // Set up an SVG group so that we can translate the final graph.
