@@ -22,13 +22,16 @@ export default class DnDTree extends Component {
       edges: props.edges
     }
     this.onNodeSelected = props.onNodeSelected || (() => {})
+    this.edgeTypes = { curve: d3.curveBasis, line: d3.curveBundle.beta(0) };
+
   }
 
   static defaultProps = {
     edgeType: 'curve',
     height: 400,
     edgeDraw: true,
-  }
+  };
+
 
   overCircle = (d)  => {
     console.log("over " + d)
@@ -153,7 +156,7 @@ export default class DnDTree extends Component {
     for (let edge of edges) { // set curve: d3.curveBundle.beta(0) for straight line
       this.graph.setEdge(edge.from, edge.to, {
         arrowhead: 'vee',
-        curve: this.props.edgeType == 'curve' ? d3.curveBasis : undefined
+        curve: this.props.edgeType in this.edgeTypes ? this.edgeTypes[this.props.edgeType] : undefined
       })
     }
 
