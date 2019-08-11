@@ -25,16 +25,14 @@ export default class GraphRenderer {
     let edges = this.tree.state.edges
     edges = edges.filter(e => e.from != edge.v || e.to != edge.w)
 
-    this.tree.setState({ edges }, () => {
-      this.tree.getGraph().removeEdge(edge)
-      this.tree.dispatchUpdate({ type: DELETE_EDGE, data: {from: edge.v, to: edge.w} })
-    })
+    this.tree.getGraph().removeEdge(edge)
+    this.tree.dispatchUpdate({ type: DELETE_EDGE, data: {from: edge.v, to: edge.w} })
   }
 
   setEdge(from, to) {
-    this.tree.setState({edges: [...this.tree.state.edges, {from, to}]}, () => {
-      this.tree.dispatchUpdate({ type: NEW_EDGE, data: {from, to} })
-    })
+    // this.tree.setState({edges: [...this.tree.props.edges, {from, to}]}, () => {
+    this.tree.setEdge(from, to)
+    this.tree.dispatchUpdate({ type: NEW_EDGE, data: {from, to} })
   }
 
   setSelectedNode(node) {

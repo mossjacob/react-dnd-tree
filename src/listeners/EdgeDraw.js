@@ -23,7 +23,7 @@ export default class EdgeDraw {
 
   setSelectedNode = id => {
     // console.log('update selected node', id)
-    this.selectedNodeID = id != null ? parseInt(id) : null
+    this.selectedNodeID = id
   }
 
   getTranslation(transform) {
@@ -90,7 +90,7 @@ export default class EdgeDraw {
     }
     this.renderer.setBehaviour('nodeDrag', false)
 
-    this.draggingNodeID = parseInt(d)
+    this.draggingNodeID = d
     const coords= d3.mouse(this.svg.node());
     this.anchor = {x: coords[0], y: coords[1]}
 

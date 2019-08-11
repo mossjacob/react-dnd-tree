@@ -22,8 +22,7 @@ export default class DnDTree extends Component {
       edges: props.edges
     }
     this.onNodeSelected = props.onNodeSelected || (() => {})
-    this.edgeTypes = { curve: d3.curveBasis, line: d3.curveBundle.beta(0) };
-
+    this.edgeTypes = { curve: d3.curveBasis, line: d3.curveBundle.beta(0) }
   }
 
   static defaultProps = {
@@ -133,7 +132,7 @@ export default class DnDTree extends Component {
 
   dispatchUpdate(update) {
     if (this.props.updateHandler) {
-      this.props.updateHandler(this.state.nodes, this.state.edges, update)
+      this.props.updateHandler(this.props.nodes, this.props.edges, update)
     }
   }
 
@@ -154,12 +153,16 @@ export default class DnDTree extends Component {
     });
 
     for (let edge of edges) { // set curve: d3.curveBundle.beta(0) for straight line
-      this.graph.setEdge(edge.from, edge.to, {
-        arrowhead: 'vee',
-        curve: this.props.edgeType in this.edgeTypes ? this.edgeTypes[this.props.edgeType] : undefined
-      })
+      this.setEdge(edge.from, edge.to)
     }
 
+  }
+
+  setEdge(from, to) {
+    this.graph.setEdge(from, to, {
+      arrowhead: 'vee',
+      curve: this.props.edgeType in this.edgeTypes ? this.edgeTypes[this.props.edgeType] : undefined
+    })
   }
 
   getGraph = () => this.graph
@@ -173,7 +176,6 @@ export default class DnDTree extends Component {
 
   componentDidUpdate(prevProps) {
     if (this.props.nodes != prevProps.nodes) {
-
       const deletionNodes = prevProps.nodes.map(n => n.serverId).diff(
         this.props.nodes.map(n => n.serverId)
       )
